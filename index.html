@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>17BCE0291 Pushpam Patel</title>
+    <style>* { padding: 0; margin: 0; } canvas { background: #eee; display: block; margin: 0 auto; }</style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="480" height="320"></canvas>
+
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var paddleHeight = 70;
+    var paddleWidth = 13;
+    var paddleY1 = (canvas.height-paddleHeight) / 2;
+    var paddleY2 = (canvas.height-paddleHeight) / 2;
+    var up1 = false;
+    var up2 = false;
+    var dn1 = false;
+    var dn2 = false;
+    var score1=0;
+    var score2=0;
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+        if(e.key == "Right" || e.key == "ArrowUp") {
+            dn2 = true;
+        }
+        else if(e.key == "Left" || e.key == "ArrowDown") {
+            up2 = true;
+        }
+        if(e.key == "Right" || e.key == "w") {
+            dn1 = true;
+        }
+        else if(e.key == "Left" || e.key == "s") {
+            up1 = true;
+        }
+    }
+
+    function keyUpHandler(e) {
+        if(e.key == "Right" || e.key == "ArrowUp") {
+            dn2 = false;
+        }
+        else if(e.key == "Left" || e.key == "ArrowDown") {
+            up2 = false;
+        }
+        if(e.key == "Right" || e.key == "w") {
+            dn1 = false;
+        }
+        else if(e.key == "Left" || e.key == "s") {
+            up1 = false;
+        }
+    }
+
+    
+
+    function drawPaddle1() {
+        ctx.beginPath();
+        ctx.rect(80, paddleY1, paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0000cc";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawPaddle2() {
+        ctx.beginPath();
+        ctx.rect(canvas.width-80, paddleY2, paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0000cc";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#004d00";
+        ctx.fillText("Score_1: "+ score1, 15, 30);
+        ctx.fillText("Score_2: "+score2, canvas.width-95, 30);
+    }
+
+    function borders(){
+        ctx.beginPath();
+        ctx.rect(0, 0, 10, 110);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+        var canvas = document.getElementById("myCanvas");
+        
+        ctx.beginPath();
+        ctx.rect(0, 205, 10, 120);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(0, 110, 12, 95);
+        ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(0, 0, 480, 10);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(470, 0, 10, 110);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(470, 205, 10, 120);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.rect(468, 110, 12, 95);
+        ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.rect(0, 310, 480, 10);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function displayend()
+    {
+        ctx.font = "12px Arial";
+        ctx.fillStyle = "#000000";
+        ctx.fillText("First to score 3 Points will win", 155, 23);
+        ctx.fillText("Up:'w' and Down:'s'", 15, canvas.height-13);
+        ctx.fillText("Up:PgUp and Down:PgDn", canvas.width-150, canvas.height-13);
+    }
+
+    function displayend2()
+    {
+        ctx.font = "10px Arial";
+        ctx.fillStyle = "#000000";;
+        ctx.fillText("Made By: Pushpam Patel", 175, canvas.height-13);
+    }
+    
+   
+    // ctx.beginPath();hkbcsscn
+    // ctx.arc(240, 160, 10, 0, Math.PI*2, false);
+    // ctx.fillStyle = "green";
+    // ctx.fill();
+    // ctx.closePath(); 
+    
+    var dx = 2;
+    var dy = -2;
+    var ballRadius = 10;
+    function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        borders();
+        drawPaddle2();
+        drawPaddle1();
+        drawScore();
+        displayend();
+        displayend2();
+        var flag=1;
+        
+        
+            if(x + dx < ballRadius+10) {
+                if (y+dy>100 && y+dy<205){
+                    score2++;
+                }
+            }
+            if(x + dx > canvas.width-ballRadius-10) {
+                if (y+dy>100 && y+dy<205){
+                    score1++;
+                }
+
+            }
+            if (x+dx>70 && x+dx<100 && y+dy>paddleY1-10 && y+dy<paddleY1+paddleHeight+10){
+                dx = -dx;
+            }
+            if (x+dx>canvas.width-90 && x+dx<canvas.width-60 && y+dy>paddleY2-10 && y+dy<paddleY2+paddleHeight+10){
+                dx = -dx;
+            }
+            if (y+dy==paddleY1-10 && y+dy==paddleY1+paddleHeight+10){
+                dx = -dx;
+            }
+            if(x + dx > canvas.width-ballRadius-10 || x + dx < ballRadius+10) {
+                dx = -dx;
+            }
+
+            if(y + dy > canvas.height-ballRadius-10 || y + dy < ballRadius+10) {
+                dy = -dy;
+            }
+
+            if (flag==1){
+                if (score1>2)
+                {
+                    alert("Player 1 WINS !!! \n GAME OVER")
+                    document.location.reload();
+                    clearInterval(interval);
+                }
+                if (score2>2)
+                {
+                    alert("Player 2 WINS !!! \n GAME OVER")
+                    document.location.reload();
+                    clearInterval(interval);
+                }
+                flag=0;
+            }
+            
+            
+            
+        //}
+        
+
+        if(up2) {
+            paddleY2 += 7;
+            if (paddleY2 + paddleHeight+10 > canvas.height){
+                paddleY2 = canvas.height - paddleHeight-10;
+            }
+        }
+        else if(dn2) {
+            paddleY2 -= 7;
+            if (paddleY2 < 10){
+                paddleY2 = 10;
+            }
+        }
+
+        if(up1) {
+            paddleY1 += 7;
+            if (paddleY1 + paddleHeight+10 > canvas.height){
+                paddleY1 = canvas.height - paddleHeight-10;
+            }
+        }
+        else if(dn1) {
+            paddleY1 -= 7;
+            if (paddleY1 < 10){
+                paddleY1 = 10;
+            }
+        }
+        
+        x += dx;
+        y += dy;
+    }
+
+setInterval(draw, 7);
+</script>
+
+</body>
+</html>
